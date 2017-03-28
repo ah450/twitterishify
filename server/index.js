@@ -3,12 +3,13 @@ let express = require('express');
 let bodyParser = require('body-parser');
 let jwt = require('express-jwt');
 let settings = require('./settings');
+var unless = require('express-unless');
 
 
 let app = express();
 app.set("trust proxy", true);
 app.disable('x-powered-by');
-let server = http.createServer();
+let server = http.createServer(app);
 // socketio friendly, for future integration if needed.
 app.use(bodyParser.json());
 app.use(jwt({
@@ -24,12 +25,18 @@ app.use(jwt({
       return null;
     }
   }
-})).unless({path: '/tokens'});
+}).unless({
+  path: [
+    {url: /tokens/, methods: ['POST']},
+    {url: /users/, methods: ['POST']}
+  ]
+}));
 
 let { usersRouter, tweetsRouter, tagsRouter, tokensRouter } = require('./routers');
+app.use('/tweets', tweetsRouter);
 
 app.use('/users', usersRouter);
-app.use('/tweets', tweetsRouter);
+
 app.use('/tags', tagsRouter);
 app.use('/tokens', tokensRouter);
 

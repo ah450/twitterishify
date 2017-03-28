@@ -7,7 +7,7 @@ let settings = require('../settings');
 module.exports = function (sequelize, DataTypes) {
   let User = sequelize.define("User", {
     email: {
-      type: DataTypes.STRING, unique: true, allowNull: false, validate: { isEmail: true, notNull: true },
+      type: DataTypes.STRING, unique: true, allowNull: false, validate: { isEmail: true},
       set: function (val) {
         if (!val) {
           val = '';
@@ -15,7 +15,10 @@ module.exports = function (sequelize, DataTypes) {
         this.setDataValue('email', val.toLowerCase());
       }
     },
-    passwordDigest: { type: DataTypes.TEXT, allowNull: false, validate: { notNull: true } }
+    name: {
+      type: DataTypes.STRING(1024), allowNull: false, validate: {notEmpty: true}
+    },
+    passwordDigest: { type: DataTypes.TEXT, allowNull: false, validate: { notEmpty: true } }
   },{
       classMethods: {
         /**
@@ -36,7 +39,7 @@ module.exports = function (sequelize, DataTypes) {
         generatePasswordHash: function (password) {
           return bcrypt.genSalt(settings.variables.saltRounds).then((salt) => {
             return bcrypt.hash(password, salt).then((hash) => {
-              this.passwordDigest = hash;
+              this.set('passwordDigest', hash);
               return this;
             });
           });

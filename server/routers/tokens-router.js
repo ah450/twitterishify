@@ -1,5 +1,5 @@
 let router = require('express').Router();
-let { sequelize: { models: { User } } } = require('./server/models');
+let { sequelize: { models: { User } } } = require('../models');
 
 // Create a token with credentials
 router.post('/', function (req, res, next) {

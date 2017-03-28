@@ -1,17 +1,25 @@
+let Twitter = require('twitter');
+let settings = require('../settings');
+
+let twitterClient = new Twitter({
+  consumer_key: settings.variables.CONSUMER_KEY,
+  consumer_secret: settings.variables.CONSUMER_SECRET,
+  bearer_token: settings.variables.BEARER_TOKEN
+});
 
 
 module.exports = function (sequelize, DataTypes) {
   let Tweet = sequelize.define("Tweet", {
-    text: { type: DataTypes.TEXT, allowNull: false, validate: { notNull: true, notEmpty: true } },
+    text: { type: DataTypes.TEXT, allowNull: false, validate: { notEmpty: true } },
     lat: { type: DataTypes.TEXT, allowNull: true, validate: { notEmpty: true } },
     long: { type: DataTypes.TEXT, allowNull: true, validate: { notEmpty: true } },
-    tweetedAt: { type: DataTypes.DATE, allowNull: false, validate: { notNull: true } },
-    tweetIdStr: { type: DataTypes.TEXT, allowNull: false, validate: { notNull: true, notEmpty: true } },
-    tweetOwnerIdStr: { type: DataTypes.STRING(1024), allowNull: false, validate: { notNull: true, notEmpty: true } },
-    tweetOwnerScreenName: { type: DataTypes.STRING(1024), allowNull: false, validate: { notNull: true, notEmpty: true } },
-    retweetCount: { type: DataTypes.INTEGER, allowNull: false, validate: { notNull: true } },
-    inReplyToTweetIdStr: { type: DataTypes.TEXT, allowNull: true, validate: { notNull: false } },
-    inReplyToUserIdStr: { type: DataTypes.TEXT, allowNull: true, validate: { notNull: false } },
+    tweetedAt: { type: DataTypes.DATE, allowNull: false },
+    tweetIdStr: { type: DataTypes.TEXT, allowNull: false, validate: { notEmpty: true } },
+    tweetOwnerIdStr: { type: DataTypes.STRING(1024), allowNull: false, validate: {  notEmpty: true } },
+    tweetOwnerScreenName: { type: DataTypes.STRING(1024), allowNull: false, validate: { notEmpty: true } },
+    retweetCount: { type: DataTypes.INTEGER, allowNull: false },
+    inReplyToTweetIdStr: { type: DataTypes.TEXT, allowNull: true },
+    inReplyToUserIdStr: { type: DataTypes.TEXT, allowNull: true },
     twitterParsedEntitiesJSON: { type: DataTypes.TEXT, allowNull: true }
   }, {
       classMethods: {
@@ -19,6 +27,26 @@ module.exports = function (sequelize, DataTypes) {
           Tweet.belongsToMany(models.Tag, {
             through: 'TweetTags',
           });
+        },
+        fetchSingleTweetByID: function (id) {
+          // Remote fetch
+          return twitterClient.get(`statuses/show/${id}`, {});
+        },
+        fromRemote: function(tweetData) {
+          // console.log(tweetData);
+          let tweet = Tweet.build({
+            text: tweetData.text,
+            tweetedAt: tweetData.created_at,
+            tweetIdStr: tweetData.id_str,
+            tweetOwnerIdStr: tweetData.user.id_str,
+            tweetOwnerScreenName: tweetData.user.screen_name,
+            retweetCount: tweetData.retweet_count,
+            inReplyToTweetIdStr: tweetData.in_reply_to_status_id_str,
+            inReplyToUserIdStr: tweetData.in_reply_to_user_id_str,
+            twitterParsedEntitiesJSON: JSON.stringify(tweetData.entities)
+
+          });
+          return tweet.save();
         }
       },
       indexes: [
