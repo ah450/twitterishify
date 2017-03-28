@@ -26,7 +26,7 @@ router.post('/', function (req, res, next) {
       if (valid) {
         return user.generateJWT(exp).then(function(jwt) {
           return res.status(201).json({
-            user: user.get(),
+            profile: user.get(),
             token: jwt
           });
         }).catch(function(err) {

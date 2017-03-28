@@ -23,8 +23,8 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.get('/email/exists/:email', function(req, res, next) {
-  let email = req.params.email;
+router.get('/email/exists', function(req, res, next) {
+  let email = req.query.value;
   User.count({
     where: {
       email: email.toLowerCase()

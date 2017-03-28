@@ -33,12 +33,12 @@ app.use(jwt({
 }));
 
 let { usersRouter, tweetsRouter, tagsRouter, tokensRouter } = require('./routers');
-app.use('/tweets', tweetsRouter);
+app.use('/api/tweets', tweetsRouter);
 
-app.use('/users', usersRouter);
+app.use('/api/users', usersRouter);
 
-app.use('/tags', tagsRouter);
-app.use('/tokens', tokensRouter);
+app.use('/api/tags', tagsRouter);
+app.use('/api/tokens', tokensRouter);
 
 
 app.use(function (err, req, res, next) {
