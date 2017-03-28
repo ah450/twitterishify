@@ -15,3 +15,8 @@ Running migrations `npm run migrations` make sure to specify node environment. `
 
 Run server in development mode `npm run dev` to run in production mode `npm run prod_server`.
 
+
+# Running web client
+
+cd into web client, run `npm install`, `bower install`,  `npm run dev`.
+
