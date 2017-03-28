@@ -7,22 +7,21 @@ data-ng-cloak
 >
 
     <header class="text-center">
-        <h3 data-translate>Login</h3>
+        <h3>Login</h3>
     </header>
     
     <md-input-container class="block">
         <label>Email</label>
         <input type="email" name="email" data-ng-model="loginData.email" required>
-        <div data-ng-messages="loginData.email.$error"
-        data-ng-show="loginForm.email.$touched"
-        >
+        <div data-ng-messages="loginForm.password.$error"
+        data-ng-show="loginForm.password.$touched">
             <div data-ng-message="required">Field is required</div>
-            <div data-ng-message="email" data-translate>Must be a valid email</div>
+            <div data-ng-message="email">Must be valid email</div>
         </div>
     </md-input-container>
 
     <md-input-container class="block">
-        <label>PASSWORD</label>
+        <label>Password</label>
         <input name="password" type="password" data-ng-model="loginData.password" required>
         <div data-ng-messages="loginForm.password.$error"
         data-ng-show="loginForm.password.$touched">

@@ -3,14 +3,11 @@
 * Author Ahmed H. Ismail
 */
 angular.module('twitter').factory('UserAuth', function($auth, $q,
-  localStorageService, User, UsersResource, Upload, endpoints, FormsHTTPCache) {
+  localStorageService, User, UsersResource, endpoints, $http) {
   var UserAuthService = function() {};
-  var clearCaches = function() {
-        FormsHTTPCache.removeAll();
-  };
+  
   UserAuthService.prototype.login = function(credentials) {
     var _this = this;
-    clearCaches();
     return $auth.login(credentials).then(function(response) {
       _this.currentUserData = response.data.profile;
       localStorageService.set('currentUser', _this.currentUserData);
@@ -20,7 +17,6 @@ angular.module('twitter').factory('UserAuth', function($auth, $q,
   };
 
   UserAuthService.prototype.setToken = function(token, user) {
-    clearCaches();
     $auth.setToken(token);
     this.currentUserData = user;
     localStorageService.set('currentUser', this.currentUserData);
@@ -39,13 +35,14 @@ angular.module('twitter').factory('UserAuth', function($auth, $q,
     this.currentUser = User.fromJSON(this.currentUserData);
   };
 
-  UserAuthService.prototype.signup = function(profile_data, files) {
-    var url = endpoints.users.resourceUrl.replace(':id.json', '');
-    var data = {};
-    _.assign(data, profile_data, files);
-    return Upload.upload({
-      url: url,
-      data: data
+  UserAuthService.prototype.signup = function(profile_data) {
+    var url = endpoints.users.resourceUrl.replace(':id', '');
+    var _this = this;
+    return $http.post(url, profile_data).then(function(response) {
+      return _this.login({
+        email: profile_data.email,
+        password: profile_data.password
+      });
     });
   };
   
@@ -59,7 +56,6 @@ angular.module('twitter').factory('UserAuth', function($auth, $q,
   
   UserAuthService.prototype.refreshUser = function() {
     var _this = this;
-    clearCaches();
     return UsersResource.get({id: this.user.id}).$promise.then(function(resource) {
       var newUser = new User(resource);
       _this.setUser(newUser);
@@ -70,7 +66,6 @@ angular.module('twitter').factory('UserAuth', function($auth, $q,
   UserAuthService.prototype.logout = function() {
     this.currentUser = undefined;
     this.currentUserData = undefined;
-    clearCaches();
     localStorageService.remove('currentUser');
     if (this.signedIn) {
       $auth.logout();

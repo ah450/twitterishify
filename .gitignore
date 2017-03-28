@@ -43,3 +43,6 @@ dist/
 
 client/node_modules
 client/bower_components
+client/dist
+client/build
+client/libs

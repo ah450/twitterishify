@@ -12,13 +12,13 @@
     <h4><a data-ui-sref="base.register">REGISTER</a></h4>
   </li>
 
-  <li data-ui-sref-active="active-state" data-ng-if="!isLoggedIn()">
+  <li data-ui-sref-active="active-state" data-ng-if="isLoggedIn()">
     <h4><a data-ui-sref="base.private.tweets">TWEETS</a></h4>
   </li>
 
-  <li data-ui-sref-active="active-state" data-ng-if="!isLoggedIn()">
+  <!--<li data-ui-sref-active="active-state" data-ng-if="!isLoggedIn()">
     <h4><a data-ui-sref="base.private.profile">PROFILE</a></h4>
-  </li>
+  </li>-->
 
   <li data-ng-if="isLoggedIn()"><i></i>
     <h4><a data-ng-click="signout()" >LOGOUT</a></h4>

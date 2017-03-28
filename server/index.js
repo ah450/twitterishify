@@ -28,7 +28,8 @@ app.use(jwt({
 }).unless({
   path: [
     {url: /tokens/, methods: ['POST']},
-    {url: /users/, methods: ['POST']}
+    {url: /users/, methods: ['POST']},
+    {url: /exists/, methods: ['GET']}
   ]
 }));
 

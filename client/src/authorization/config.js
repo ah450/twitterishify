@@ -4,7 +4,7 @@ angular.module('twitter').config(function($authProvider, apiHost) {
   $authProvider.storage = 'localStorage';
   $authProvider.baseUrl = apiHost;
   $authProvider.loginUrl = 'tokens';
-  $authProvider.signupUrl = 'profiles.json';
+  $authProvider.signupUrl = 'profiles';
 });
 
 

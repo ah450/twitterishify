@@ -48,7 +48,7 @@ angular.module('twitter').config(function ($stateProvider) {
     url: '',
     views: {
       'main-content': {
-        templateUrl: 'view/static/landing.html'
+        templateUrl: 'views/static/landing.html'
       }
     }
   };

@@ -1,4 +1,4 @@
-angular.module('twitter').factory('User', function (moment, UsersResource, Upload, endpoints) {
+angular.module('twitter').factory('User', function (moment, UsersResource, endpoints) {
 
   var User = function (resource) {
     this.resource = resource;

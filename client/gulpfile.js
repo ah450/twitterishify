@@ -119,18 +119,14 @@ gulp.task('production', ['production-helper'], function () {
 
 
 gulp.task('server', ['build'], function() {
-  var proxyOpts = {
-    target: 'http://localhost:3000',
-    ws: true
-  }
   connect.server({
     livereload: true,
     root: 'build',
-    port: 3000,
+    port: 8000,
     https: false,
     middleware: function() {
       return [
-        modRewrite(['^/api/(.*)$ http://localhost:8000/api/$1 [P]'])
+        modRewrite(['^/api/(.*)$ http://localhost:3000/api/$1 [P]'])
       ]
     }
   });

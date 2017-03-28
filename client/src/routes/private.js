@@ -29,7 +29,7 @@ angular.module('twitter').config(function ($stateProvider) {
       }
     },
     views: {
-      'main-content': {
+      'main-content@base': {
         templateUrl: 'tweets/search.html'
       }
     },
@@ -44,7 +44,7 @@ angular.module('twitter').config(function ($stateProvider) {
       }
     },
     views: {
-      'main-content': {
+      'main-content@base': {
         templateUrl: 'users/profile.html'
       }
     },
